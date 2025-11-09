@@ -10,7 +10,11 @@ class ProductSeeder extends Seeder
 {
     public function run(): void
     {
-        Product::query()->delete();
+        // Product::query()->delete();
+
+        DB::statement('SET FOREIGN_KEY_CHECKS=0;');
+        Product::truncate();
+        DB::statement('SET FOREIGN_KEY_CHECKS=1;');
 
         Product::create([
             'name'        => 'Keyboard Mechanical 60%',
