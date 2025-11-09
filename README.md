@@ -1,59 +1,69 @@
-<p align="center"><a href="https://laravel.com" target="_blank"><img src="https://raw.githubusercontent.com/laravel/art/master/logo-lockup/5%20SVG/2%20CMYK/1%20Full%20Color/laravel-logolockup-cmyk-red.svg" width="400" alt="Laravel Logo"></a></p>
+# Treetan E-Commerce API
 
-<p align="center">
-<a href="https://github.com/laravel/framework/actions"><img src="https://github.com/laravel/framework/workflows/tests/badge.svg" alt="Build Status"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/dt/laravel/framework" alt="Total Downloads"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/v/laravel/framework" alt="Latest Stable Version"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/l/laravel/framework" alt="License"></a>
-</p>
+Backend sederhana untuk sistem penjualan barang (e-commerce) yang dibangun menggunakan **Laravel**.  
+Fitur yang dicakup sudah sesuai dengan technical test:
 
-## About Laravel
+-   Register & Login user (Laravel Sanctum)
+-   Manajemen produk (list & detail)
+-   Checkout & pembuatan pesanan
+-   Integrasi Payment Gateway (Xendit) sampai webhook
+-   Riwayat pemesanan
+-   Proteksi API dengan **Access Key** di header + token auth
 
-Laravel is a web application framework with expressive, elegant syntax. We believe development must be an enjoyable and creative experience to be truly fulfilling. Laravel takes the pain out of development by easing common tasks used in many web projects, such as:
+## Tech Stack
 
-- [Simple, fast routing engine](https://laravel.com/docs/routing).
-- [Powerful dependency injection container](https://laravel.com/docs/container).
-- Multiple back-ends for [session](https://laravel.com/docs/session) and [cache](https://laravel.com/docs/cache) storage.
-- Expressive, intuitive [database ORM](https://laravel.com/docs/eloquent).
-- Database agnostic [schema migrations](https://laravel.com/docs/migrations).
-- [Robust background job processing](https://laravel.com/docs/queues).
-- [Real-time event broadcasting](https://laravel.com/docs/broadcasting).
+-   PHP 8.x
+-   Laravel 11
+-   MySQL (Railway)
+-   Laravel Sanctum (API auth)
+-   Xendit (Payment Gateway)
+-   Railway.app (deployment)
 
-Laravel is accessible, powerful, and provides tools required for large, robust applications.
+## Live URL
 
-## Learning Laravel
+-   **Base URL Backend**  
+    `https://treetan-ecommerce-api-production.up.railway.app`
 
-Laravel has the most extensive and thorough [documentation](https://laravel.com/docs) and video tutorial library of all modern web application frameworks, making it a breeze to get started with the framework. You can also check out [Laravel Learn](https://laravel.com/learn), where you will be guided through building a modern Laravel application.
+-   **API Docs (Postman)**  
+    `<URL_POSTMAN_DOCS_KAMU_DI_SINI>`
 
-If you don't feel like reading, [Laracasts](https://laracasts.com) can help. Laracasts contains thousands of video tutorials on a range of topics including Laravel, modern PHP, unit testing, and JavaScript. Boost your skills by digging into our comprehensive video library.
+## Fitur Utama
 
-## Laravel Sponsors
+-   **Auth**
 
-We would like to extend our thanks to the following sponsors for funding Laravel development. If you are interested in becoming a sponsor, please visit the [Laravel Partners program](https://partners.laravel.com).
+    -   `POST /api/register` — registrasi user baru
+    -   `POST /api/login` — login & generate API token (Sanctum)
 
-### Premium Partners
+-   **Produk**
 
-- **[Vehikl](https://vehikl.com)**
-- **[Tighten Co.](https://tighten.co)**
-- **[Kirschbaum Development Group](https://kirschbaumdevelopment.com)**
-- **[64 Robots](https://64robots.com)**
-- **[Curotec](https://www.curotec.com/services/technologies/laravel)**
-- **[DevSquad](https://devsquad.com/hire-laravel-developers)**
-- **[Redberry](https://redberry.international/laravel-development)**
-- **[Active Logic](https://activelogic.com)**
+    -   `GET /api/products` — list produk (paginate)
+    -   `GET /api/products/{id}` — detail produk
 
-## Contributing
+-   **Checkout & Pesanan**
 
-Thank you for considering contributing to the Laravel framework! The contribution guide can be found in the [Laravel documentation](https://laravel.com/docs/contributions).
+    -   `POST /api/checkout` — buat order baru dari cart sederhana (produk + qty)
+    -   `GET /api/orders` — list pesanan milik user login
+    -   `GET /api/orders/{id}` — detail pesanan
 
-## Code of Conduct
+-   **Pembayaran**
 
-In order to ensure that the Laravel community is welcoming to all, please review and abide by the [Code of Conduct](https://laravel.com/docs/contributions#code-of-conduct).
+    -   `POST /api/payment/{order}` — membuat invoice pembayaran ke Xendit
+    -   `POST /api/payment/webhook` — endpoint webhook untuk update status order ketika pembayaran berhasil
 
-## Security Vulnerabilities
+-   **Security**
+    -   Semua request ke `/api/*` harus menyertakan header:
+        -   `X-Access-Key: supersecretaccesskey`
+    -   Endpoint selain `/api/register` dan `/api/login` juga harus menyertakan:
+        -   `Authorization: Bearer <token>`
 
-If you discover a security vulnerability within Laravel, please send an e-mail to Taylor Otwell via [taylor@laravel.com](mailto:taylor@laravel.com). All security vulnerabilities will be promptly addressed.
+## Cara Menjalankan Secara Lokal
 
-## License
+### 1. Clone & install dependency
 
-The Laravel framework is open-sourced software licensed under the [MIT license](https://opensource.org/licenses/MIT).
+```bash
+git clone <URL_REPO_KAMU>
+cd <NAMA_FOLDER_REPO>
+composer install
+cp .env.example .env
+php artisan key:generate
+```
